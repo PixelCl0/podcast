@@ -55,7 +55,7 @@
     <img src="ton_logo.png" alt="Logo du podcast" class="logo">
 
     <!-- Buzzer pour tirer une carte -->
-    <img src="bu.png" alt="Buzzer" class="buzzer" onclick="drawCard()">
+    <img src="b.png" alt="Buzzer" class="buzzer" onclick="drawCard()">
 
     <!-- Zone d'affichage des résultats -->
     <div id="result"></div>
