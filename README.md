@@ -5,31 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tirage de cartes - Atypique !</title>
     <style>
-        /* Import des polices */
-        @font-face {
-            font-family: 'Tan Headline';
-            src: url('https://fonts.cdnfonts.com/s/39753/TanHeadline-Regular.woff') format('woff');
-        }
-        @font-face {
-            font-family: 'Dumondi Expanded';
-            src: url('https://fonts.cdnfonts.com/s/39753/DumondiExpanded-Regular.woff') format('woff');
-        }
-
         /* Style global */
         body {
             background-color: #0b4348;
-            font-family: 'Dumondi Expanded', sans-serif;
             color: white;
             text-align: center;
             margin: 0;
             padding: 0;
-        }
-
-        /* Titre du podcast */
-        h1 {
-            font-family: 'Tan Headline', serif;
-            font-size: 3rem;
-            margin-bottom: 20px;
         }
 
         /* Logo */
@@ -39,20 +21,12 @@
             margin-top: 20px;
         }
 
-        /* Bouton de tirage */
-        button {
-            background-color: #ffffff;
-            color: #0b4348;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.5rem;
+        /* Buzzer */
+        .buzzer {
+            width: 150px;
+            height: auto;
             margin-top: 30px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #cfe3e3;
         }
 
         /* Zone des cartes tirées */
@@ -70,9 +44,25 @@
             height: auto;
         }
 
+        /* Zone d'animation de la roue */
+        .wheel {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 5px solid white;
+            border-radius: 50%;
+            animation: spin 0s linear infinite; /* Animation par défaut désactivée */
+        }
+
         /* Résultats */
         #result {
             margin-top: 40px;
+        }
+
+        /* Animation de rotation de la roue */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -80,21 +70,41 @@
     <!-- Logo -->
     <img src="ton_logo.png" alt="Logo du podcast" class="logo">
 
-    <!-- Titre du podcast -->
-    <h1>Atypique !</h1>
+    <!-- Buzzer pour tirer une carte -->
+    <img src="b.png" alt="Buzzer" class="buzzer" onclick="startSpin()">
 
-    <!-- Bouton de tirage -->
-    <button onclick="drawCard()">Tirer une carte</button>
+    <!-- Zone d'animation de la roue -->
+    <div id="wheel-container" class="wheel" style="display: none;"></div>
 
     <!-- Zone d'affichage des résultats -->
     <div id="result"></div>
 
-    <!-- Script JavaScript pour le tirage -->
+    <!-- Script JavaScript pour le tirage et l'animation -->
     <script>
         // Tableau contenant les 3 premières cartes (sans "s.png")
         let cards = ["c.png", "q.png", "d.png"];
-        let specialCard = "s.png"; // La carte "spéciale" à tirer au 4e tirage
+        let specialCard = "s.png"; // La carte spéciale à tirer au 4e tirage
         let drawnCards = 0; // Compteur de tirages
+
+        function startSpin() {
+            // Afficher la roue et démarrer l'animation
+            let wheel = document.getElementById("wheel-container");
+            wheel.style.display = "block"; 
+            wheel.style.animation = "spin 2s linear infinite";
+
+            // Après 2 secondes, arrêter l'animation et tirer la carte
+            setTimeout(() => {
+                stopSpin();
+                drawCard();
+            }, 3000); // Dure 3 secondes avant de tirer la carte
+        }
+
+        function stopSpin() {
+            // Arrêter l'animation de la roue
+            let wheel = document.getElementById("wheel-container");
+            wheel.style.animation = "spin 0s linear infinite"; // Désactiver l'animation
+            wheel.style.display = "none"; // Cacher la roue après tirage
+        }
 
         function drawCard() {
             let card;
@@ -113,9 +123,9 @@
             // Remplacer la carte affichée par la nouvelle carte tirée
             document.getElementById("result").innerHTML = `<div class="card"><img src="${card}" alt="Carte"></div>`;
             
-            // Désactiver le bouton après le 4e tirage
+            // Désactiver le buzzer après le 4e tirage
             if (drawnCards === 4) {
-                document.querySelector("button").disabled = true;
+                document.querySelector(".buzzer").style.display = "none";
             }
         }
     </script>
